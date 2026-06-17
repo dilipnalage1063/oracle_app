@@ -9,6 +9,33 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
+  final staffController = TextEditingController();
+  final passwordController = TextEditingController();
+
+  void login() {
+
+  String staff = staffController.text;
+  String password = passwordController.text;
+
+  if (staff.isEmpty || password.isEmpty) {
+
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+        content: Text('Enter all fields'),
+      ),
+    );
+
+    return;
+  }
+
+  Navigator.push(
+    context,
+    MaterialPageRoute(
+      builder: (context) => const DashboardScreen(),
+    ),
+  );
+}
+
   bool isPasswordHidden = true;
 
   @override
@@ -59,10 +86,10 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                   ),
 
-                  const SizedBox(height: 5),
-
+                  const SizedBox(height: 5),                  
                   // Staff Number Field
                   TextField(
+                    controller: staffController,
                     decoration: InputDecoration(
                       hintText: 'curtis.feilty',
                       filled: true,
@@ -108,8 +135,8 @@ class _LoginScreenState extends State<LoginScreen> {
 
                   // Password Field
                   TextField(
+                    controller: passwordController,
                     obscureText: isPasswordHidden,
-
                     decoration: InputDecoration(
                       hintText: 'H6EC37h*',
 
@@ -159,14 +186,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     height: 50,
 
                     child: ElevatedButton(
-                      onPressed: () {
-  Navigator.push(
-    context,
-    MaterialPageRoute(
-      builder: (context) => const DashboardScreen(),
-    ),
-  );
-},
+                      onPressed:login,
 
                       style: ElevatedButton.styleFrom(
                         backgroundColor: const Color(0xFF1D3D77),
