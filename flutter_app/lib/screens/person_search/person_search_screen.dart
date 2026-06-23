@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_app/screens/employee_detail/employee_detail_screen.dart';
 
 class PersonSearchScreen extends StatefulWidget {
   const PersonSearchScreen({super.key});
@@ -13,7 +14,6 @@ class _PersonSearchScreenState extends State<PersonSearchScreen> {
   final TextEditingController _personNumberController = TextEditingController();
   final TextEditingController _nationalIdController = TextEditingController();
   DateTime _selectedDate = DateTime(2025, 5, 18);
-  bool _includeTerminated = false;
   int _searchResultsCount = 0;
   List<Map<String, String>> _searchResults = [];
 
@@ -27,7 +27,6 @@ class _PersonSearchScreenState extends State<PersonSearchScreen> {
   }
 
   void _performSearch() {
-    // Simulate search results
     setState(() {
       _searchResults = [
         {
@@ -36,6 +35,7 @@ class _PersonSearchScreenState extends State<PersonSearchScreen> {
           'nationalId': '123-45-6789',
           'department': 'Engineering',
           'location': 'New York',
+          'personType': 'Staff',
           'job': 'Senior Developer',
           'assignment': 'Full-time',
         },
@@ -45,6 +45,7 @@ class _PersonSearchScreenState extends State<PersonSearchScreen> {
           'nationalId': '987-65-4321',
           'department': 'HR',
           'location': 'Los Angeles',
+          'personType': 'Manager',
           'job': 'HR Manager',
           'assignment': 'Full-time',
         },
@@ -60,7 +61,6 @@ class _PersonSearchScreenState extends State<PersonSearchScreen> {
       _personNumberController.clear();
       _nationalIdController.clear();
       _selectedDate = DateTime(2025, 5, 18);
-      _includeTerminated = false;
       _searchResults = [];
       _searchResultsCount = 0;
     });
@@ -71,13 +71,14 @@ class _PersonSearchScreenState extends State<PersonSearchScreen> {
     final screenWidth = MediaQuery.of(context).size.width;
     final isSmallScreen = screenWidth < 600;
     final padding = isSmallScreen ? 12.0 : 16.0;
-    
+
     return Scaffold(
       backgroundColor: const Color(0xFFEEF5FC),
       appBar: AppBar(
         backgroundColor: const Color(0xFF1F4E8C),
         elevation: 0,
-        title: const Text('Core HR Services', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600)),
+        title: const Text('Core HR Services',
+            style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600)),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () => Navigator.pop(context),
@@ -86,7 +87,8 @@ class _PersonSearchScreenState extends State<PersonSearchScreen> {
           IconButton(icon: const Icon(Icons.search), onPressed: () {}),
           Stack(
             children: [
-              IconButton(icon: const Icon(Icons.notifications_none), onPressed: () {}),
+              IconButton(
+                  icon: const Icon(Icons.notifications_none), onPressed: () {}),
               Positioned(
                 right: 6,
                 top: 6,
@@ -96,8 +98,14 @@ class _PersonSearchScreenState extends State<PersonSearchScreen> {
                     color: const Color(0xFFDC2626),
                     borderRadius: BorderRadius.circular(6),
                   ),
-                  constraints: const BoxConstraints(minWidth: 14, minHeight: 14),
-                  child: const Text('12', style: TextStyle(color: Colors.white, fontSize: 8, fontWeight: FontWeight.bold), textAlign: TextAlign.center),
+                  constraints:
+                      const BoxConstraints(minWidth: 14, minHeight: 14),
+                  child: const Text('12',
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 8,
+                          fontWeight: FontWeight.bold),
+                      textAlign: TextAlign.center),
                 ),
               ),
             ],
@@ -110,13 +118,17 @@ class _PersonSearchScreenState extends State<PersonSearchScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // Header Section with Person Management
+              // Header Section
               Container(
                 padding: EdgeInsets.all(isSmallScreen ? 16 : 20),
                 decoration: BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(12),
-                  boxShadow: [BoxShadow(color: Colors.black.withValues(alpha: 0.05), blurRadius: 8)],
+                  boxShadow: [
+                    BoxShadow(
+                        color: Colors.black.withValues(alpha: 0.05),
+                        blurRadius: 8)
+                  ],
                 ),
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -165,7 +177,8 @@ class _PersonSearchScreenState extends State<PersonSearchScreen> {
               // Search Form Card
               Card(
                 elevation: 0,
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12)),
                 child: Padding(
                   padding: EdgeInsets.all(isSmallScreen ? 16 : 20),
                   child: Column(
@@ -173,7 +186,8 @@ class _PersonSearchScreenState extends State<PersonSearchScreen> {
                     children: [
                       Row(
                         children: [
-                          const Icon(Icons.search, color: Color(0xFF1F4E8C), size: 20),
+                          const Icon(Icons.search,
+                              color: Color(0xFF1F4E8C), size: 20),
                           const SizedBox(width: 10),
                           Expanded(
                             child: Text(
@@ -188,20 +202,36 @@ class _PersonSearchScreenState extends State<PersonSearchScreen> {
                           if (!isSmallScreen) ...[
                             TextButton(
                               onPressed: () {},
-                              child: const Text('Saved Search', style: TextStyle(color: Color(0xFF1F4E8C), fontSize: 12)),
+                              child: const Text('Advanced',
+                                  style: TextStyle(
+                                      color: Color(0xFF1F4E8C), fontSize: 12)),
                             ),
+                            const SizedBox(width: 8),
+                            TextButton(
+                              onPressed: () {},
+                              child: const Text('Saved Search',
+                                  style: TextStyle(
+                                      color: Color(0xFF1F4E8C), fontSize: 12)),
+                            ),
+                            const SizedBox(width: 8),
                             Container(
-                              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 10, vertical: 6),
                               decoration: BoxDecoration(
                                 color: const Color(0xFFF9FAFB),
                                 borderRadius: BorderRadius.circular(6),
-                                border: Border.all(color: const Color(0xFFE5E7EB)),
+                                border:
+                                    Border.all(color: const Color(0xFFE5E7EB)),
                               ),
                               child: Row(
                                 children: const [
-                                  Text('All People', style: TextStyle(color: Color(0xFF1F2937), fontSize: 11)),
+                                  Text('All People',
+                                      style: TextStyle(
+                                          color: Color(0xFF1F2937),
+                                          fontSize: 11)),
                                   SizedBox(width: 6),
-                                  Icon(Icons.arrow_drop_down, size: 18, color: Color(0xFF6B7280)),
+                                  Icon(Icons.arrow_drop_down,
+                                      size: 18, color: Color(0xFF6B7280)),
                                 ],
                               ),
                             ),
@@ -215,23 +245,46 @@ class _PersonSearchScreenState extends State<PersonSearchScreen> {
                             Expanded(
                               child: TextButton(
                                 onPressed: () {},
-                                style: TextButton.styleFrom(padding: const EdgeInsets.symmetric(horizontal: 8)),
-                                child: const Text('Saved Search', style: TextStyle(color: Color(0xFF1F4E8C), fontSize: 11)),
+                                style: TextButton.styleFrom(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 8)),
+                                child: const Text('Advanced',
+                                    style: TextStyle(
+                                        color: Color(0xFF1F4E8C), fontSize: 11)),
                               ),
                             ),
+                            const SizedBox(width: 8),
+                            Expanded(
+                              child: TextButton(
+                                onPressed: () {},
+                                style: TextButton.styleFrom(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 8)),
+                                child: const Text('Saved Search',
+                                    style: TextStyle(
+                                        color: Color(0xFF1F4E8C), fontSize: 11)),
+                              ),
+                            ),
+                            const SizedBox(width: 8),
                             Expanded(
                               child: Container(
-                                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 10, vertical: 6),
                                 decoration: BoxDecoration(
                                   color: const Color(0xFFF9FAFB),
                                   borderRadius: BorderRadius.circular(6),
-                                  border: Border.all(color: const Color(0xFFE5E7EB)),
+                                  border: Border.all(
+                                      color: const Color(0xFFE5E7EB)),
                                 ),
                                 child: Row(
                                   children: const [
-                                    Text('All People', style: TextStyle(color: Color(0xFF1F2937), fontSize: 10)),
+                                    Text('All People',
+                                        style: TextStyle(
+                                            color: Color(0xFF1F2937),
+                                            fontSize: 10)),
                                     SizedBox(width: 4),
-                                    Icon(Icons.arrow_drop_down, size: 16, color: Color(0xFF6B7280)),
+                                    Icon(Icons.arrow_drop_down,
+                                        size: 16, color: Color(0xFF6B7280)),
                                   ],
                                 ),
                               ),
@@ -241,39 +294,35 @@ class _PersonSearchScreenState extends State<PersonSearchScreen> {
                       ],
                       SizedBox(height: isSmallScreen ? 12 : 16),
 
-                      // Name & Keywords
+                      // Form Fields
                       if (isSmallScreen)
                         Column(
                           children: [
                             _buildFormField(
-                              label: '** Name',
-                              controller: _nameController,
-                              hintText: 'Enter name',
-                              isSmallScreen: true,
-                            ),
+                                label: '** Name',
+                                controller: _nameController,
+                                hintText: 'Enter name',
+                                isSmallScreen: true),
                             const SizedBox(height: 12),
                             _buildFormField(
-                              label: '** Keywords',
-                              controller: _keywordsController,
-                              hintText: 'Enter keywords',
-                              isSmallScreen: true,
-                            ),
+                                label: '** Keywords',
+                                controller: _keywordsController,
+                                hintText: 'Enter keywords',
+                                isSmallScreen: true),
                             const SizedBox(height: 12),
                             _buildFormField(
-                              label: '** Person Number',
-                              controller: _personNumberController,
-                              hintText: 'Enter person number',
-                              isSmallScreen: true,
-                            ),
+                                label: '** Person Number',
+                                controller: _personNumberController,
+                                hintText: 'Enter person number',
+                                isSmallScreen: true),
                             const SizedBox(height: 12),
                             _buildDateField(),
                             const SizedBox(height: 12),
                             _buildFormField(
-                              label: '** National ID',
-                              controller: _nationalIdController,
-                              hintText: 'Enter national ID',
-                              isSmallScreen: true,
-                            ),
+                                label: '** National ID',
+                                controller: _nationalIdController,
+                                hintText: 'Enter national ID',
+                                isSmallScreen: true),
                           ],
                         )
                       else
@@ -282,42 +331,35 @@ class _PersonSearchScreenState extends State<PersonSearchScreen> {
                             Row(
                               children: [
                                 Expanded(
-                                  child: _buildFormField(
-                                    label: '** Name',
-                                    controller: _nameController,
-                                    hintText: 'Enter name',
-                                  ),
-                                ),
+                                    child: _buildFormField(
+                                        label: '** Name',
+                                        controller: _nameController,
+                                        hintText: 'Enter name')),
                                 const SizedBox(width: 16),
                                 Expanded(
-                                  child: _buildFormField(
-                                    label: '** Keywords',
-                                    controller: _keywordsController,
-                                    hintText: 'Enter keywords',
-                                  ),
-                                ),
+                                    child: _buildFormField(
+                                        label: '** Keywords',
+                                        controller: _keywordsController,
+                                        hintText: 'Enter keywords')),
                               ],
                             ),
                             const SizedBox(height: 16),
                             Row(
                               children: [
                                 Expanded(
-                                  child: _buildFormField(
-                                    label: '** Person Number',
-                                    controller: _personNumberController,
-                                    hintText: 'Enter person number',
-                                  ),
-                                ),
+                                    child: _buildFormField(
+                                        label: '** Person Number',
+                                        controller: _personNumberController,
+                                        hintText: 'Enter person number')),
                                 const SizedBox(width: 16),
                                 Expanded(child: _buildDateField()),
                               ],
                             ),
                             const SizedBox(height: 16),
                             _buildFormField(
-                              label: '** National ID',
-                              controller: _nationalIdController,
-                              hintText: 'Enter national ID',
-                            ),
+                                label: '** National ID',
+                                controller: _nationalIdController,
+                                hintText: 'Enter national ID'),
                           ],
                         ),
                       SizedBox(height: isSmallScreen ? 12 : 16),
@@ -333,10 +375,13 @@ class _PersonSearchScreenState extends State<PersonSearchScreen> {
                                     onPressed: _resetSearch,
                                     style: OutlinedButton.styleFrom(
                                       foregroundColor: const Color(0xFF1F4E8C),
-                                      side: const BorderSide(color: Color(0xFF1F4E8C)),
-                                      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
+                                      side: const BorderSide(
+                                          color: Color(0xFF1F4E8C)),
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 12, vertical: 12),
                                     ),
-                                    child: const Text('Reset', style: TextStyle(fontSize: 12)),
+                                    child: const Text('Reset',
+                                        style: TextStyle(fontSize: 12)),
                                   ),
                                 ),
                                 const SizedBox(width: 10),
@@ -345,10 +390,13 @@ class _PersonSearchScreenState extends State<PersonSearchScreen> {
                                     onPressed: () {},
                                     style: OutlinedButton.styleFrom(
                                       foregroundColor: const Color(0xFF1F4E8C),
-                                      side: const BorderSide(color: Color(0xFF1F4E8C)),
-                                      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
+                                      side: const BorderSide(
+                                          color: Color(0xFF1F4E8C)),
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 12, vertical: 12),
                                     ),
-                                    child: const Text('Save...', style: TextStyle(fontSize: 12)),
+                                    child: const Text('Save...',
+                                        style: TextStyle(fontSize: 12)),
                                   ),
                                 ),
                               ],
@@ -360,10 +408,15 @@ class _PersonSearchScreenState extends State<PersonSearchScreen> {
                                 onPressed: _performSearch,
                                 style: ElevatedButton.styleFrom(
                                   backgroundColor: const Color(0xFF1F4E8C),
-                                  padding: const EdgeInsets.symmetric(vertical: 14),
-                                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
+                                  padding: const EdgeInsets.symmetric(
+                                      vertical: 14),
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(6)),
                                 ),
-                                child: const Text('Search', style: TextStyle(fontSize: 12, fontWeight: FontWeight.w600)),
+                                child: const Text('Search',
+                                    style: TextStyle(
+                                        fontSize: 12,
+                                        fontWeight: FontWeight.w600)),
                               ),
                             ),
                           ],
@@ -375,30 +428,41 @@ class _PersonSearchScreenState extends State<PersonSearchScreen> {
                               onPressed: _resetSearch,
                               style: OutlinedButton.styleFrom(
                                 foregroundColor: const Color(0xFF1F4E8C),
-                                side: const BorderSide(color: Color(0xFF1F4E8C)),
-                                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                                side:
+                                    const BorderSide(color: Color(0xFF1F4E8C)),
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 16, vertical: 12),
                               ),
-                              child: const Text('Reset', style: TextStyle(fontSize: 12)),
+                              child: const Text('Reset',
+                                  style: TextStyle(fontSize: 12)),
                             ),
                             const SizedBox(width: 12),
                             OutlinedButton(
                               onPressed: () {},
                               style: OutlinedButton.styleFrom(
                                 foregroundColor: const Color(0xFF1F4E8C),
-                                side: const BorderSide(color: Color(0xFF1F4E8C)),
-                                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                                side:
+                                    const BorderSide(color: Color(0xFF1F4E8C)),
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 16, vertical: 12),
                               ),
-                              child: const Text('Save...', style: TextStyle(fontSize: 12)),
+                              child: const Text('Save...',
+                                  style: TextStyle(fontSize: 12)),
                             ),
                             const Spacer(),
                             ElevatedButton(
                               onPressed: _performSearch,
                               style: ElevatedButton.styleFrom(
                                 backgroundColor: const Color(0xFF1F4E8C),
-                                padding: const EdgeInsets.symmetric(horizontal: 28, vertical: 12),
-                                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 28, vertical: 12),
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(6)),
                               ),
-                              child: const Text('Search', style: TextStyle(fontSize: 12, fontWeight: FontWeight.w600)),
+                              child: const Text('Search',
+                                  style: TextStyle(
+                                      fontSize: 12,
+                                      fontWeight: FontWeight.w600)),
                             ),
                           ],
                         ),
@@ -406,7 +470,11 @@ class _PersonSearchScreenState extends State<PersonSearchScreen> {
                       const SizedBox(height: 8),
                       Align(
                         alignment: Alignment.centerRight,
-                        child: Text('* Required', style: TextStyle(color: const Color(0xFF1F4E8C).withValues(alpha: 0.7), fontSize: 10)),
+                        child: Text('* Required',
+                            style: TextStyle(
+                                color: const Color(0xFF1F4E8C)
+                                    .withValues(alpha: 0.7),
+                                fontSize: 10)),
                       ),
                     ],
                   ),
@@ -417,7 +485,8 @@ class _PersonSearchScreenState extends State<PersonSearchScreen> {
               // Search Results Card
               Card(
                 elevation: 0,
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12)),
                 child: Padding(
                   padding: EdgeInsets.all(isSmallScreen ? 16 : 20),
                   child: Column(
@@ -441,14 +510,29 @@ class _PersonSearchScreenState extends State<PersonSearchScreen> {
                                 children: [
                                   TextButton.icon(
                                     onPressed: () {},
-                                    icon: const Icon(Icons.arrow_downward, size: 14),
-                                    label: const Text('Actions', style: TextStyle(fontSize: 11)),
-                                    style: TextButton.styleFrom(foregroundColor: const Color(0xFF1F4E8C)),
+                                    icon: const Icon(Icons.arrow_drop_down,
+                                        size: 14),
+                                    label: const Text('Actions',
+                                        style: TextStyle(fontSize: 11)),
+                                    style: TextButton.styleFrom(
+                                        foregroundColor:
+                                            const Color(0xFF1F4E8C)),
                                   ),
                                   TextButton(
                                     onPressed: () {},
-                                    child: const Text('View', style: TextStyle(fontSize: 11)),
-                                    style: TextButton.styleFrom(foregroundColor: const Color(0xFF1F4E8C)),
+                                    style: TextButton.styleFrom(
+                                        foregroundColor:
+                                            const Color(0xFF1F4E8C)),
+                                    child: const Text('View',
+                                        style: TextStyle(fontSize: 11)),
+                                  ),
+                                  TextButton(
+                                    onPressed: () {},
+                                    style: TextButton.styleFrom(
+                                        foregroundColor:
+                                            const Color(0xFF1F4E8C)),
+                                    child: const Text('Format',
+                                        style: TextStyle(fontSize: 11)),
                                   ),
                                 ],
                               ),
@@ -459,7 +543,8 @@ class _PersonSearchScreenState extends State<PersonSearchScreen> {
                       _searchResults.isEmpty
                           ? Container(
                               width: double.infinity,
-                              padding: EdgeInsets.symmetric(vertical: isSmallScreen ? 32 : 48),
+                              padding: EdgeInsets.symmetric(
+                                  vertical: isSmallScreen ? 32 : 48),
                               decoration: BoxDecoration(
                                 color: const Color(0xFFF9FAFB),
                                 borderRadius: BorderRadius.circular(8),
@@ -482,7 +567,8 @@ class _PersonSearchScreenState extends State<PersonSearchScreen> {
                                   ),
                                   const SizedBox(height: 4),
                                   Padding(
-                                    padding: const EdgeInsets.symmetric(horizontal: 16),
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 16),
                                     child: Text(
                                       'Use the search criteria above to find people',
                                       textAlign: TextAlign.center,
@@ -500,25 +586,107 @@ class _PersonSearchScreenState extends State<PersonSearchScreen> {
                               child: DataTable(
                                 columnSpacing: isSmallScreen ? 12 : 16,
                                 columns: const [
-                                  DataColumn(label: Text('Name', style: TextStyle(fontWeight: FontWeight.w600, fontSize: 11))),
-                                  DataColumn(label: Text('Person Number', style: TextStyle(fontWeight: FontWeight.w600, fontSize: 11))),
-                                  DataColumn(label: Text('National ID', style: TextStyle(fontWeight: FontWeight.w600, fontSize: 11))),
-                                  DataColumn(label: Text('Department', style: TextStyle(fontWeight: FontWeight.w600, fontSize: 11))),
-                                  DataColumn(label: Text('Location', style: TextStyle(fontWeight: FontWeight.w600, fontSize: 11))),
-                                  DataColumn(label: Text('Job', style: TextStyle(fontWeight: FontWeight.w600, fontSize: 11))),
-                                  DataColumn(label: Text('Assignment', style: TextStyle(fontWeight: FontWeight.w600, fontSize: 11))),
+                                  DataColumn(
+                                      label: Text('Name',
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.w600,
+                                              fontSize: 11))),
+                                  DataColumn(
+                                      label: Text('Actions',
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.w600,
+                                              fontSize: 11))),
+                                  DataColumn(
+                                      label: Text('Person Number',
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.w600,
+                                              fontSize: 11))),
+                                  DataColumn(
+                                      label: Text('National ID',
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.w600,
+                                              fontSize: 11))),
+                                  DataColumn(
+                                      label: Text('Department',
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.w600,
+                                              fontSize: 11))),
+                                  DataColumn(
+                                      label: Text('Location',
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.w600,
+                                              fontSize: 11))),
+                                  DataColumn(
+                                      label: Text('User Person Type',
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.w600,
+                                              fontSize: 11))),
+                                  DataColumn(
+                                      label: Text('Job',
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.w600,
+                                              fontSize: 11))),
+                                  DataColumn(
+                                      label: Text('Assignment',
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.w600,
+                                              fontSize: 11))),
                                 ],
                                 rows: _searchResults
                                     .map(
                                       (result) => DataRow(
                                         cells: [
-                                          DataCell(Text(result['name'] ?? '', style: const TextStyle(fontSize: 11))),
-                                          DataCell(Text(result['personNumber'] ?? '', style: const TextStyle(fontSize: 11))),
-                                          DataCell(Text(result['nationalId'] ?? '', style: const TextStyle(fontSize: 11))),
-                                          DataCell(Text(result['department'] ?? '', style: const TextStyle(fontSize: 11))),
-                                          DataCell(Text(result['location'] ?? '', style: const TextStyle(fontSize: 11))),
-                                          DataCell(Text(result['job'] ?? '', style: const TextStyle(fontSize: 11))),
-                                          DataCell(Text(result['assignment'] ?? '', style: const TextStyle(fontSize: 11))),
+                                          // ── NAME as hyperlink → EmployeeDetailScreen ──
+                                          DataCell(
+                                            GestureDetector(
+                                              onTap: () => Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                  builder: (_) =>
+                                                      EmployeeDetailScreen(
+                                                          employee: result),
+                                                ),
+                                              ),
+                                              child: Text(
+                                                result['name'] ?? '',
+                                                style: const TextStyle(
+                                                  fontSize: 11,
+                                                  color: Color(0xFF1F4E8C),
+                                                  decoration:
+                                                      TextDecoration.underline,
+                                                  fontWeight: FontWeight.w600,
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                          const DataCell(
+                                              Icon(Icons.more_vert, size: 18)),
+                                          DataCell(Text(
+                                              result['personNumber'] ?? '',
+                                              style: const TextStyle(
+                                                  fontSize: 11))),
+                                          DataCell(Text(
+                                              result['nationalId'] ?? '',
+                                              style: const TextStyle(
+                                                  fontSize: 11))),
+                                          DataCell(Text(
+                                              result['department'] ?? '',
+                                              style: const TextStyle(
+                                                  fontSize: 11))),
+                                          DataCell(Text(result['location'] ?? '',
+                                              style: const TextStyle(
+                                                  fontSize: 11))),
+                                          DataCell(Text(
+                                              result['personType'] ?? '',
+                                              style: const TextStyle(
+                                                  fontSize: 11))),
+                                          DataCell(Text(result['job'] ?? '',
+                                              style: const TextStyle(
+                                                  fontSize: 11))),
+                                          DataCell(Text(
+                                              result['assignment'] ?? '',
+                                              style: const TextStyle(
+                                                  fontSize: 11))),
                                         ],
                                       ),
                                     )
@@ -541,26 +709,13 @@ class _PersonSearchScreenState extends State<PersonSearchScreen> {
         unselectedItemColor: const Color(0xFF9CA3AF),
         currentIndex: 3,
         items: const [
+          BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
+          BottomNavigationBarItem(icon: Icon(Icons.list), label: 'Requests'),
           BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: 'Home',
-          ),
+              icon: Icon(Icons.check_circle_outline), label: 'Approvals'),
+          BottomNavigationBarItem(icon: Icon(Icons.people), label: 'Directory'),
           BottomNavigationBarItem(
-            icon: Icon(Icons.list),
-            label: 'Requests',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.check_circle_outline),
-            label: 'Approvals',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.people),
-            label: 'Directory',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.account_circle),
-            label: 'Profile',
-          ),
+              icon: Icon(Icons.account_circle), label: 'Profile'),
         ],
       ),
     );
@@ -588,24 +743,25 @@ class _PersonSearchScreenState extends State<PersonSearchScreen> {
           controller: controller,
           decoration: InputDecoration(
             hintText: hintText,
-            hintStyle: const TextStyle(color: Color(0xFFB0BEC5), fontSize: 12),
+            hintStyle:
+                const TextStyle(color: Color(0xFFB0BEC5), fontSize: 12),
             filled: true,
             fillColor: Colors.white,
-            contentPadding: const EdgeInsets.symmetric(
-              horizontal: 12,
-              vertical: 12,
-            ),
+            contentPadding:
+                const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(6),
               borderSide: const BorderSide(color: Color(0xFFE0E0E0)),
             ),
             enabledBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(6),
-              borderSide: const BorderSide(color: Color(0xFFE0E0E0), width: 1),
+              borderSide:
+                  const BorderSide(color: Color(0xFFE0E0E0), width: 1),
             ),
             focusedBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(6),
-              borderSide: const BorderSide(color: Color(0xFF1F4E8C), width: 1.5),
+              borderSide:
+                  const BorderSide(color: Color(0xFF1F4E8C), width: 1.5),
             ),
           ),
           style: const TextStyle(fontSize: 13),
@@ -620,7 +776,10 @@ class _PersonSearchScreenState extends State<PersonSearchScreen> {
       children: [
         const Text(
           '* Effective As-of Date',
-          style: TextStyle(fontSize: 11, fontWeight: FontWeight.w600, color: Color(0xFF1F2937)),
+          style: TextStyle(
+              fontSize: 11,
+              fontWeight: FontWeight.w600,
+              color: Color(0xFF1F2937)),
         ),
         const SizedBox(height: 6),
         InkWell(
@@ -636,7 +795,8 @@ class _PersonSearchScreenState extends State<PersonSearchScreen> {
             }
           },
           child: Container(
-            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
+            padding:
+                const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
             decoration: BoxDecoration(
               color: Colors.white,
               borderRadius: BorderRadius.circular(6),
@@ -644,11 +804,13 @@ class _PersonSearchScreenState extends State<PersonSearchScreen> {
             ),
             child: Row(
               children: [
-                const Icon(Icons.calendar_today, size: 16, color: Color(0xFF6B7280)),
+                const Icon(Icons.calendar_today,
+                    size: 16, color: Color(0xFF6B7280)),
                 const SizedBox(width: 8),
                 Text(
                   '${_selectedDate.day} ${_monthName(_selectedDate.month)} ${_selectedDate.year}',
-                  style: const TextStyle(fontSize: 13, color: Color(0xFF1F2937)),
+                  style: const TextStyle(
+                      fontSize: 13, color: Color(0xFF1F2937)),
                 ),
               ],
             ),
@@ -660,18 +822,8 @@ class _PersonSearchScreenState extends State<PersonSearchScreen> {
 
   String _monthName(int month) {
     const months = [
-      'Jan',
-      'Feb',
-      'Mar',
-      'Apr',
-      'May',
-      'Jun',
-      'Jul',
-      'Aug',
-      'Sep',
-      'Oct',
-      'Nov',
-      'Dec'
+      'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
+      'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'
     ];
     return months[month - 1];
   }
